@@ -1,0 +1,90 @@
+﻿<Window x:Class="AutomationExamples.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutomationExamples.Views"
+        mc:Ignorable="d"
+        xmlns:converters="clr-namespace:AutomationExamples.Converters"
+        Title="MainView" Height="450" Width="800" Background="LightGray">
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:BoolVisibilityConverter x:Key="localVisibilityConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock FontWeight="Bold" Text="Automation Step"/>
+        <Button Grid.Row="1" Content="Generate Opt Structures" Margin="5" Background="CadetBlue" Width="150" Command="{Binding GenerateOptStructuresCommand}"/>
+        <Button Grid.Row="2" Content="Generate Course" Margin="5" Background="CadetBlue"  Width="150" Command="{Binding GenerateCourseCommand}"/>
+        <Button Grid.Row="3" Content="Generate Plan" Margin="5" Background="CadetBlue" Width="150" Command="{Binding GeneratePlanCommand}"/>
+        <Button Grid.Row="4" Height="25" Content="Set Prescription" Margin="5" Background="CadetBlue" Width="150" Command="{Binding SetRxCommand}"/>
+        <Button Grid.Row="5" Height="25" Content="Optimize" Margin="5" Background="CadetBlue" Width="150" Command="{Binding OptimizeCommand}"/>
+        <Button Grid.Row="6" Content="Calculate Dose" Margin="5" Background="CadetBlue" Width="150" Command="{Binding CalculateDoseCommand}"/>
+        <Button Grid.Row="7" Content="Normalize Dose" Margin="5" Background="CadetBlue" Width="150"/>
+
+        <TextBlock FontWeight="Bold" Text="Parameter" Grid.Column="1"/>
+        <TextBox Text="{Binding CourseId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Width="150" Margin="5"/>
+        <StackPanel Grid.Column="1" Grid.Row="3">
+            <ComboBox Width="150" Margin="5" ItemsSource="{Binding PlanTemplates}" SelectedItem="{Binding SelectedPlanTemplate}" DisplayMemberPath="Preview.ID"/>
+            <!-- <TextBlock Text="Iso Pos (from User Origin)" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="X(cm)" Width="50" HorizontalAlignment="Center" Margin="2"/>
+                <TextBlock Text="Y(cm)" Width="50" HorizontalAlignment="Center" Margin="2"/>
+                <TextBlock Text="Z(cm)" Width="50" HorizontalAlignment="Center" Margin="2"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" DataContext="{Binding IsocenterPosition}">
+                <TextBox Text="{Binding x}" Width="50" HorizontalAlignment="Center" Margin="2"/>
+                <TextBox Text="{Binding y}" Width="50" HorizontalAlignment="Center" Margin="2"/>
+                <TextBox Text="{Binding z}" Width="50" HorizontalAlignment="Center" Margin="2"/>
+            </StackPanel>-->
+        </StackPanel>
+        <Grid Grid.Row="4" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Dose per Fx [cGy]:" Margin="5"/>
+            <TextBox Width="50" Margin="5" Text="{Binding DosePerFraction}" Grid.Column="1"/>
+            <TextBlock Text="Number of Fx:" Margin="5" Grid.Row="1"/>
+            <TextBox Width="50" Margin="5" Text="{Binding NumberOfFractions}" Grid.Column="1" Grid.Row="1"/>
+            <TextBlock Text="Tx Percentage (%):" Margin="5" Grid.Row="2"/>
+            <TextBox Width="50" Margin="5" Text="{Binding PrescribedPercentage}" Grid.Column="1" Grid.Row="2"/>
+        </Grid>
+        <StackPanel Grid.Row="5" Grid.Column="1">
+            <!--<CheckBox IsChecked="{Binding UseRapidPlan}" Content="Use RapidPlan"/>-->
+            <ComboBox ItemsSource="{Binding OptimizationObjectives}" Margin="5" DisplayMemberPath="Preview.ID" SelectedItem="{Binding SelectedOptimizationObjective}" Visibility="{Binding UseObjectiveTemplate, Converter={StaticResource localVisibilityConverter}}"/>
+            <!--<ComboBox ItemsSource="{Binding RapidPlanModels}" Margin="5" DisplayMemberPath="Name" SelectedItem="{Binding SelectedRapidPlanModel}" Visibility="{Binding UseRapidPlan, Converter={StaticResource localVisibilityConverter}}"/>-->
+        </StackPanel>
+        <TextBox Grid.Row="7" Grid.Column="1" Margin="5" Text="{Binding NormalizationValue}" Width="150"/>
+        <Button Grid.Row="8" Content="Launch All" Background="CadetBlue" Width="150" Margin="5"/>
+        <Button Grid.Row="9" Content="Save" Background="CadetBlue" Width="150" Margin="5" Command="{Binding SaveCommand}"/>
+        <TextBlock FontWeight="Bold" Text="Result" Grid.Column="2"/>
+        <TextBlock Text="{Binding OptStructureResult}" Grid.Column="2" Grid.Row="1" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding CourseResult}" Grid.Column="2" Grid.Row="2" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding PlanResult}" Grid.Column="2" Grid.Row="3" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding OptimizerResult}" Grid.Column="2" Grid.Row="5" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding CalculationResult}" Grid.Column="2" Grid.Row="6" TextWrapping="Wrap"/>
+    </Grid>
+</Window>
